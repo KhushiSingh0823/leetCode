@@ -6,7 +6,7 @@ class Node {
 
     public Node(int _val) {
         val = _val;
-        children = new ArrayList<>(); // Initialize the children list
+        children = new ArrayList<>(); 
     }
 
     public Node(int _val, List<Node> _children) {
@@ -37,6 +37,6 @@ class NaryTree {
         root.children.get(0).children = Arrays.asList(new Node(5), new Node(6));
 
         List<Integer> result = naryTree.postorder(root);
-        System.out.println(result); // Output: [5, 6, 3, 2, 4, 1]
+        System.out.println(result); 
     }
 }
