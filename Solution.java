@@ -1,7 +1,8 @@
 import java.util.*;
+
 class Solution {
     public int[][] modifiedGraphEdges(int n, int[][] edges, int source, int destination, int target) {
-        List<int[]>[] adjacencyList = new ArrayList[n];
+        List<int[]>[] adjacencyList = new List[n];
         for (int i = 0; i < n; i++) {
             adjacencyList[i] = new ArrayList<>();
         }
@@ -20,14 +21,19 @@ class Solution {
         }
 
         runDijkstra(adjacencyList, edges, distances, source, 0, 0);
-        int difference = target - distances[destination][0];
-        if (difference < 0) return new int[][]{}; 
-        runDijkstra(adjacencyList, edges, distances, source, difference, 1);
-        if (distances[destination][1] < target) return new int[][]{}; 
+        if (distances[destination][0] > target) return new int[][]{}; 
 
         for (int[] edge : edges) {
             if (edge[2] == -1) edge[2] = 1; 
         }
+
+        runDijkstra(adjacencyList, edges, distances, source, 0, 1);
+        if (distances[destination][1] < target) {
+            for (int[] edge : edges) {
+                if (edge[2] == 1) edge[2] += target - distances[destination][1]; 
+            }
+        }
+
         return edges;
     }
 
@@ -48,15 +54,7 @@ class Solution {
                 int nextNode = neighbor[0], edgeIndex = neighbor[1];
                 int weight = edges[edgeIndex][2];
 
-                if (weight == -1) weight = 1; // Initially consider -1 as 1
-
-                if (run == 1 && edges[edgeIndex][2] == -1) {
-           
-                    int newWeight = difference + distances[nextNode][0] - distances[currentNode][1];
-                    if (newWeight > weight) {
-                        edges[edgeIndex][2] = weight = newWeight; 
-                    }
-                }
+                if (weight == -1) weight = 1; 
 
                 if (distances[nextNode][run] > distances[currentNode][run] + weight) {
                     distances[nextNode][run] = distances[currentNode][run] + weight;
@@ -74,9 +72,13 @@ class Solution {
         int destination = 4;
         int target = 5;
         int[][] result = solution.modifiedGraphEdges(n, edges, source, destination, target);
-        System.out.println("Modified Graph Edges:");
-        for (int[] edge : result) {
-            System.out.println(Arrays.toString(edge));
+        if(result.length == 0) {
+            System.out.println("No solution found");
+        } else {
+            System.out.println("Modified Graph Edges:");
+            for (int[] edge : result) {
+                System.out.println(Arrays.toString(edge));
+            }
         }
     }
 }
