@@ -1,0 +1,53 @@
+class AllOne {
+    private HashMap<String, Integer> countMap;
+    private TreeMap<Integer, HashSet<String>> countToKeys;
+
+    public AllOne() {
+        countMap = new HashMap<>();
+        countToKeys = new TreeMap<>();
+    }
+
+    public void inc(String key) {
+        int count = countMap.getOrDefault(key, 0) + 1;
+        countMap.put(key, count);
+        countToKeys.computeIfAbsent(count, k -> new HashSet<>()).add(key);
+        if (count > 1) {
+            countToKeys.get(count - 1).remove(key);
+            if (countToKeys.get(count - 1).isEmpty()) {
+                countToKeys.remove(count - 1);
+            }
+        }
+    }
+
+    public void dec(String key) {
+        int count = countMap.getOrDefault(key, 0) - 1;
+        if (count == 0) {
+            countMap.remove(key);
+            countToKeys.get(count + 1).remove(key);
+            if (countToKeys.get(count + 1).isEmpty()) {
+                countToKeys.remove(count + 1);
+            }
+        } else {
+            countMap.put(key, count);
+            countToKeys.computeIfAbsent(count, k -> new HashSet<>()).add(key);
+            countToKeys.get(count + 1).remove(key);
+            if (countToKeys.get(count + 1).isEmpty()) {
+                countToKeys.remove(count + 1);
+            }
+        }
+    }
+
+    public String getMaxKey() {
+        if (countToKeys.isEmpty()) {
+            return "";
+        }
+        return countToKeys.lastEntry().getValue().iterator().next();
+    }
+
+    public String getMinKey() {
+        if (countToKeys.isEmpty()) {
+            return "";
+        }
+        return countToKeys.firstEntry().getValue().iterator().next();
+    }
+}
