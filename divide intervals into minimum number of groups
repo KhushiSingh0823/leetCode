@@ -1,0 +1,26 @@
+class Solution{
+    public int minGroups(int [][] intervals){
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        int n = interval.length;
+
+        for(int i=0; i<n; i++){
+           min = Math.min[min, interval[i][0]] ++ ;
+           min = Math.max[max, interval[i][1] +1] -- ; 
+        }
+        int eventCount[] = new int[max+2];
+        for(int i=0; i<n; i++){
+           eventCount[interval[i][0]] ++ ;
+           eventCount[interval[i][1] +1] -- ; 
+        }
+
+        int maxOverlaps = 0;
+        int sum=0;
+        for(int i= min; i<max+2; i++){
+           sum += eventCount[i] ;
+           maxOverlaps = Math.max[maxOverlaps, sum] ; 
+        }
+        return maxOverlaps;
+    }
+}
