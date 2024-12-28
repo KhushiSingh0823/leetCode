@@ -1,0 +1,44 @@
+class Solution {
+    int dp[][][];
+    private int[] helper(int sum[],int k,int idx,int cnt){
+        if(cnt == 4) return new int[]{0,-1,-1,-1};
+        if(idx >= sum.length) return new int[]{-(int)1e9,-1,-1,-1};
+        if(dp[idx][cnt][0] != Integer.MIN_VALUE) return dp[idx][cnt];
+        int take[] = helper(sum,k,idx + k,cnt + 1);
+        take[0] += sum[idx];
+        take[cnt] = idx;
+        int notTake[] = helper(sum,k,idx + 1,cnt);
+        if(take[0] == notTake[0]){
+            for(int i = 1;i <= 3;i++){
+                if(take[i] == notTake[i]) continue;
+                if(take[i] < notTake[i]){
+                    for(int j = 0;j < 4;j++) dp[idx][cnt][j] = take[j];
+                    return take;
+                }
+                for(int j = 0;j < 4;j++) dp[idx][cnt][j] = notTake[j];
+                return notTake;
+            }
+        }
+        else if(take[0] < notTake[0]){
+            for(int i = 0;i < 4;i++) dp[idx][cnt][i] = notTake[i];
+            return notTake;
+        }
+        for(int i = 0;i < 4;i++) dp[idx][cnt][i] = take[i];
+        return take;
+    }
+    public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int sum[] = new int[nums.length - k + 1];
+        int curr = 0;
+        for(int i = 0;i < nums.length;i++){
+            curr += nums[i];
+            if(i >= k - 1){
+                sum[i - k + 1] = curr;
+                curr -= nums[i - k + 1];
+            }
+        }
+        dp = new int[sum.length][4][4];
+        for(var c:dp) for(var m:c) Arrays.fill(m,Integer.MIN_VALUE);
+        var ans = helper(sum,k,0,1);
+        return new int[]{ans[1],ans[2],ans[3]};
+    }
+}
