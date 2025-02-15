@@ -1,0 +1,32 @@
+class Solution {
+    public int punishmentNumber(int n) {
+        int sum=0;
+
+        for(int i=1; i<=n; i++ ){
+            int sqr=i*i;
+            if(canPartition(sqr, i, 0)){                
+                sum+=sqr;
+            }
+        }
+
+        return sum;
+    }
+
+
+    boolean canPartition(int sqr, int tgt, int sum){
+        if(sqr==0){
+            return tgt==sum;
+        }
+               
+        if(     canPartition(sqr/10, tgt, sum + sqr%10) 
+            ||  canPartition(sqr/100, tgt, sum + sqr%100)
+            ||  canPartition(sqr/1000, tgt, sum + sqr%1000)
+            ||  canPartition(sqr/10000, tgt, sum + sqr%10000)
+        ){
+            return true;
+        };
+
+        return false;
+    }
+
+}
