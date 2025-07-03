@@ -1,0 +1,22 @@
+class Solution {
+    public char getKthCharacter(int k) {
+        StringBuilder word = new StringBuilder("a");
+
+        while (word.length() < k) {
+            StringBuilder nextPart = new StringBuilder();
+
+            for (int i = 0; i < word.length(); i++) {
+                char ch = word.charAt(i);
+                if (ch == 'z') {
+                    nextPart.append('a');
+                } else {
+                    nextPart.append((char)(ch + 1));
+                }
+            }
+
+            word.append(nextPart);
+        }
+
+        return word.charAt(k - 1); // 1-based index
+    }
+}
