@@ -1,0 +1,19 @@
+class Solution {
+    public int findLucky(int[] arr) {
+        HashMap<Integer,Integer> freq = new HashMap<>();
+        for(int num : arr){
+            freq.put(num, freq.getOrDefault(num,0)+1);
+        }
+
+        int result = -1;
+
+        for(int key : freq.keySet()){
+            if(key == freq.get(key)){
+                result = Math.max(result,key);
+                //freq.get(key) represents the frequency (count) of the number key in the input array
+            }
+        }
+
+        return result;
+    }
+}
